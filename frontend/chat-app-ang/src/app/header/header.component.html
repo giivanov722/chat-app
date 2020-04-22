@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg navbar-light shadow">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item mr-1">
+        <button class="btn btn-md font-weight-light transition" routerLink="/">Home</button>
+      </li>
+    </ul>
+    <a class="navbar-brand text ml-auto mr-auto" href="#">ChatApp</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-1" *ngIf="!userAuthenticated">
+        <button class="btn btn-md font-weight-light transition" routerLink="user/login">Login</button>
+      </li>
+      <li class="nav-item ml-1" *ngIf="!userAuthenticated">
+        <button class="btn btn-md font-weight-light transition" routerLink="user/signup">Sign up</button>
+      </li>
+      <li class="nav-item ml-1" *ngIf="userAuthenticated">
+        <button class="btn btn-md font-weight-light transition" (click) = "onLogout()">Logout</button>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,8 @@
+<h1>Friends list</h1>
+
+<ul *ngFor = "let user of users">
+  <div *ngIf = "user.username != currentUser">
+    <li>{{user.username}}</li>
+    <button [routerLink]="['']">Message</button>
+  </div>
+</ul>
