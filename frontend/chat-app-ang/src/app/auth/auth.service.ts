@@ -90,7 +90,7 @@ export class AuthService {
           this.userId,
           this.username
           );
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
     });
   }
 
@@ -105,7 +105,7 @@ export class AuthService {
       this.clearAuthData();
       this.userId = null;
       this.username = null;
-      this.router.navigate(['/user/login']);
+      this.router.navigate(['']);
     });
   }
 

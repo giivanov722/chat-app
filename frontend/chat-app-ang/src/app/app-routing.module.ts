@@ -5,11 +5,13 @@ import { MainComponent } from './main/main.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthGuard } from './auth/auth.guard';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 const routes: Routes = [
-  { path: '', component: MainComponent, canActivate: [AuthGuard] },
+  { path: '', component: WelcomeComponent },
+  { path: 'home', component: MainComponent, canActivate: [AuthGuard] },
   { path: 'user/login', component: LoginComponent},
-  { path: 'user/signup', component: SignupComponent}
+  { path: 'user/signup', component: SignupComponent},
 ];
 
 @NgModule({

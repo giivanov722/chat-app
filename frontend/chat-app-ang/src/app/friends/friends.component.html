@@ -3,6 +3,6 @@
 <ul *ngFor = "let user of users">
   <div *ngIf = "user.username != currentUser">
     <li>{{user.username}}</li>
-    <button [routerLink]="['']">Message</button>
+    <button (click)="joinChat(user.username)">Message</button>
   </div>
 </ul>

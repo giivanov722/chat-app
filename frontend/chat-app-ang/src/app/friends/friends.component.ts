@@ -3,6 +3,7 @@ import { AuthService } from '../auth/auth.service';
 import { UserService } from '../main/user.service';
 import { User } from '../main/user.model';
 import { Subscription } from 'rxjs';
+import { ChatService } from '../chat/chat.service';
 
 @Component({
   selector: 'app-friends',
@@ -16,7 +17,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
 
   private usersSubscription: Subscription;
 
-  constructor(private userService: UserService, private authService: AuthService) { }
+  constructor(private userService: UserService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit() {
     this.currentUser = this.authService.getUsername();
@@ -29,6 +30,18 @@ export class FriendsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.usersSubscription.unsubscribe();
+  }
+
+  joinChat(friendUsername) {
+    const username = this.authService.getUsername();
+    let chatName;
+    if (friendUsername[0] < username[0]) {
+      chatName = friendUsername + '_' + username;
+    } else {
+      chatName = username + '_' + friendUsername;
+    }
+    console.log("I am in join chat and the name is " + chatName);
+    this.chatService.joinChat(username, chatName);
   }
 
 }

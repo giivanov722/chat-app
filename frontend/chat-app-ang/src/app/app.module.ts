@@ -14,6 +14,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthenticationInterceptor } from './auth/auth-interceptor';
 import { HeaderComponent } from './header/header.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { HeaderComponent } from './header/header.component';
     LoginComponent,
     SignupComponent,
     HeaderComponent,
+    WelcomeComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ChatService } from './chat.service';
 import { Message } from './message.model';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-chat',
@@ -12,21 +13,24 @@ import { Subscription } from 'rxjs';
 export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
   messages: Message[] = [];
+  user: string;
+  userId: string;
 
   private messagesSub: Subscription;
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.chatService.getMessage();
+    //this.chatService.getMessage();
     this.messagesSub = this.chatService.getMessagesUpdateListener()
     .subscribe(messages => {
       this.messages = messages;
     });
+    this.user = this.authService.getUsername();
   }
 
   ngOnChanges() {
-    this.chatService.getMessage();
+    // this.chatService.getMessage();
     this.messagesSub = this.chatService.getMessagesUpdateListener()
       .subscribe(messages => {
         this.messages = messages;
@@ -44,7 +48,11 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
     if (form.invalid) {
       return;
     }
-    this.chatService.sendMessage(form.value.body);
+    this.chatService.sendMessage(this.user, form.value.body);
+  }
+
+  leaveChat(){
+    this.chatService.leaveChat();
   }
 
 }

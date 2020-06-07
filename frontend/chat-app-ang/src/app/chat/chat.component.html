@@ -2,7 +2,11 @@
 
 <div>
   <ul *ngFor = 'let message of messages'>
-    <li>{{message.body}}</li>
+    <li><h6>{{message.username}}</h6>
+      {{message.body}}
+      <br>
+      {{message.time}}
+    </li>
   </ul>
 </div>
 
@@ -11,4 +15,5 @@ style="margin-bottom: 0; margin-top: auto;">
   <label for=""></label>
   <input type="text" name="body" ngModel required>
   <button type="submit">Send</button>
+  <button type="button" (click)="leaveChat()">Leave</button>
 </form>
