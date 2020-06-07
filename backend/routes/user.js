@@ -34,18 +34,15 @@ router.post('/login', (req, res, next) => {
     let fetchedUser;
     User.findOne({username: req.body.username})
     .then(user => {
-        console.log(user);
         if(!user){
             return res.status(401).json({
                 message: 'Incorrect user'
             });
         }
         fetchedUser = user;
-        console.log("password " + req.body.password + ", " + user.password);
         return bcrypt.compare(req.body.password, user.password);
     })
     .then(result => {
-        console.log(result);
         if(!result){
             return res.status(401).json({
                 message:'Incorrect password'
@@ -87,10 +84,8 @@ router.get('/logout', authCheck, (req,res,err) => {
 });
 
 router.get('/users', authCheck, (req,res,next)=>{
-    console.log("I am in getting users backend");
     let fetchedUsers;
     User.find({}, (err, users) => {
-        console.log(users);
         fetchedUsers = users.map(user => {
             return {
                 username: user.username,
