@@ -40,7 +40,6 @@ export class FriendsComponent implements OnInit, OnDestroy {
     } else {
       chatName = username + '_' + friendUsername;
     }
-    console.log("I am in join chat and the name is " + chatName);
     this.chatService.joinChat(username, chatName);
   }
 

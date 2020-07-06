@@ -1,5 +1,6 @@
 export interface Message {
-  username: string;
+  chat_name: string;
+  creator: string;
   body: string;
-  time: string;
+  date: string;
 }

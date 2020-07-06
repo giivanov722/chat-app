@@ -12,55 +12,57 @@ export class ChatService {
   private url = environment.SOCKET_ENDPOINT;
   private socket;
   private messages: Message[] = [];
+  private chatName: string;
 
   private messagesUpdateListener = new Subject<Message[]>();
+  private oldMessagesUpdateListener = new Subject<Message[]>();
 
   constructor(private router: Router) {
     this.socket = io(this.url);
    }
 
    joinChat(username, chatName) {
+     if (this.chatName){
+       this.leaveChat();
+     }
      const chatInfo = {
        username,
        chatName
      };
      this.socket.emit('joinChat', chatInfo);
+     this.chatName = chatName;
+     this.socket.on('old-messages', messages => {
+       this.messages = [...messages];
+       this.messagesUpdateListener.next([...this.messages]);
+       this.router.navigate(['home']);
+     });
 
-     this.socket.on('new-message', (message) => {
-      console.log('get message ' + message.body + ' and the user is ' + message.username);
+     this.socket.on('new-message', message => {
       this.messages.push(message);
+      this.chatName = chatName;
       this.messagesUpdateListener.next([...this.messages]);
     });
-     this.router.navigate(['home']);
    }
 
-   sendMessage(username, body) {
+   sendMessage(creator, body) {
      const message: Message = {
-      username,
+      chat_name: this.chatName,
+      creator,
       body,
-      time: null
+      date: null
      };
-     console.log('I am in  send message');
      this.socket.emit('new-message', message);
    }
 
    leaveChat(){
     //  this.socket.emit('disconnect');
     this.socket.disconnect();
-     console.log('chat left');
    }
-
-  //  getMessage() {
-  //   this.socket.on('new-message', (message) => {
-  //     console.log('get message ' + message.body + ' and the user is ' + message.username);
-  //     this.messages.push(message);
-  //     this.messagesUpdateListener.next([...this.messages]);
-  //   });
-  //  }
 
    getMessagesUpdateListener() {
      return this.messagesUpdateListener.asObservable();
    }
+
 
 }
 

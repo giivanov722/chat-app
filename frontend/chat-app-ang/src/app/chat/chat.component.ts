@@ -35,7 +35,6 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(messages => {
         this.messages = messages;
       });
-    console.log(this.messages);
   }
 
   ngOnDestroy() {

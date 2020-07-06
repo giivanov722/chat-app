@@ -3,6 +3,7 @@
 // const authCheck = require('../middleware/authentication-check');
 // const router = express.Router();
 const moment = require('moment');
+const Message = require('./models/message');
 const {
     userJoin,
     getCurrentUser,
@@ -15,15 +16,29 @@ const connect = (io) => {
         
         console.log("Socket: " + socket);
         socket.on('joinChat', ({username, chatName}) => {
-            const user = userJoin(socket.id, username, chatName);
-            console.log('user ' + user.username + 'joined ' + user.chatName);
-            socket.join(user.chatName);
+            Message.find({chat_name: chatName}).limit(100).exec(function(err, msgs){
+                const user = userJoin(socket.id, username, chatName);
+                console.log('user ' + user.username + 'joined ' + user.chatName);
+                socket.join(user.chatName);
+                io.to(user.chatName).emit('old-messages', msgs);
+            })
+            
         });
 
         //listen for messages
         socket.on('new-message', msg => {
             const user = getCurrentUser(socket.id);
-            io.to(user.chatName).emit('new-message', formatMessage(msg.username, msg.body));
+            const message = new Message({
+                chat_name: msg.chat_name,
+                creator: msg.creator,
+                body: msg.body,
+                date: moment().format('ll')
+            });
+            message.save()
+            .catch(err => {
+                console.log("Error with message saving: " + err);
+            })
+            io.to(user.chatName).emit('new-message', formatMessage(msg.creator, msg.body));
         });
 
         //Runs when client disconnects
@@ -38,31 +53,13 @@ const connect = (io) => {
             }
             console.log('Disconnection unsucessful');
         })
-
-        // router.post("/startChat", authCheck, (req, res, next) => {
-        //     const chatName = req.body.chatName
-        //     chatName.findOne({chatName: chatName})
-        //     .then(chat => {
-        //         if(!chat){
-        //             const chat = new Chat({
-        //                 chatName: chatName,
-        //                 messages: [{}]
-        //             });
-        //             chat.save()
-        //             .then(chat => {
-        //                 io.on('startChat', chatName)
-        //             })
-        //         }
-        //     })
-        // })
-
     });
 
-    function formatMessage(username, body) {
+    function formatMessage(creator, body) {
         return {
-            username,
+            creator,
             body,
-            time: moment().format('h:mm a')
+            date: moment().format('ll')
         };
     }
 }

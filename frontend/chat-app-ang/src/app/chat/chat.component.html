@@ -1,11 +1,19 @@
 <h1>Chat</h1>
 
 <div>
-  <ul *ngFor = 'let message of messages'>
-    <li><h6>{{message.username}}</h6>
-      {{message.body}}
+  <ul *ngFor = 'let msg of oldMessages'>
+    <p>tuka sum</p>
+    <li><h6>{{msg.creator}}</h6>
+      {{msg.body}}
       <br>
-      {{message.time}}
+      {{msg.date}}
+    </li>
+  </ul>
+  <ul *ngFor = 'let msg of messages'>
+    <li><h6>{{msg.creator}}</h6>
+      {{msg.body}}
+      <br>
+      {{msg.date}}
     </li>
   </ul>
 </div>
